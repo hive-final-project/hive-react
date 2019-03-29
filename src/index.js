@@ -1,17 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+
+import 'typeface-roboto';
 import './index.css';
+
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter as Router } from 'react-router-dom';
-// import { AuthStore } from './context/AuthStore';
+import { AuthStore } from './context/AuthStore';
 
 
 ReactDOM.render(
     <Router>
-      {/* <AuthStore> */}
+      <AuthStore>
         <App />
-      {/* </AuthStore> */}
+      </AuthStore>
     </Router>,
     document.getElementById('root'));
 
