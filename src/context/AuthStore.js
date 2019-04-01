@@ -1,49 +1,53 @@
-import React, { Component } from 'react';
+
+import React, { Component } from 'react'
+import { authService } from '../services/index'
+
 
 const AuthContext = React.createContext();
-const CURRENT_USER_KEY = 'current-user'
 
 class AuthStore extends Component {
-    state = {
-        user: JSON.parse(localStorage.getItem(CURRENT_USER_KEY) || '{}')
-    }
 
-    handleUserChange = (user) => {
-        this.setState({ user });
-        if(user && user.email){
-            localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
-        }
-        else localStorage.removeItem(CURRENT_USER_KEY);
-    }
+  state = {
+    user: {}
+  }
+  userChangeSubscription = {}
 
-    isAdmin = () => {
-        return this.state.user.role === "admin";
-    }
+  componentDidMount() {
+    this.userChangeSubscription = authService.onUserChange()
+      .subscribe(user => this.setState({ user: user }));
+  }
 
-    isAuthenticated = () => {
-        return !!this.state.user.email;
-    }
+  componentWillUnmount() {
+    this.userChangeSubscription.unsubscribe();
+  }
 
-    render(){
-        return(
-            <AuthContext.Provider value={{ 
-                user: this.state.user, 
-                onUserChanged: this.handleUserChange,
-                isAdmin : this.isAdmin(),
-                isAuthenticated: this.isAuthenticated()
-            }}>
-            { this.props.children }
-            </AuthContext.Provider>
-        );
-    }
+  handleUserChange = (user) => {
+    this.setState({ user: user });
+    
+  }
+
+  isAuthenticated = () => this.state.user && this.state.user.email;
+  isAdmin = () => this.state.user && this.state.user.role === 'admin';
+
+  render() {
+    return (
+      <AuthContext.Provider value={{
+        user: this.state.user,
+        isAuthenticated: this.isAuthenticated,
+        isAdmin: this.isAdmin,
+      }}>
+        {this.props.children}
+      </AuthContext.Provider>
+    );
+  }
 }
 
 const withAuthConsumer = (Component) => {
-    return (props) => (
-      <AuthContext.Consumer>
-        {(storeProps) => <Component {...props} {...storeProps}/>}
-      </AuthContext.Consumer>
-    )
-  }
+  return (props) => (
+    <AuthContext.Consumer>
+      {(storeProps) => <Component {...props} {...storeProps}/>}
+    </AuthContext.Consumer>
+  )
+}
 
-export { AuthContext, AuthStore, withAuthConsumer };
+export { AuthContext, AuthStore, withAuthConsumer }

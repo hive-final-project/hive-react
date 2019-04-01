@@ -3,7 +3,8 @@ import { Redirect } from 'react-router-dom';
 
 import authService from '../../services/auth-service';
 import { withAuthConsumer } from '../../context/AuthStore';
-import RegisterForm from '../ui/RegisterForm';
+
+import ProfileForm from '../ui/ProfileForm';
 
 
 const emailRegEx = /(.+)@(.+){2,}\.(.+){2,}/i;
@@ -36,9 +37,11 @@ const validations = {
     return message;
   	}
 	}
-}	
+}
 
-class Register extends Component {
+
+
+class Profile extends Component {
 
 	state = {
     user: {
@@ -49,6 +52,10 @@ class Register extends Component {
       attachment: '',
       location: {
         coordinates: [0,0] },
+      imageURL: '',
+      category:'',
+      deliverDay:'',
+      otherInfo:''
     },
     errors: {
       name: validations.name(),
@@ -59,12 +66,21 @@ class Register extends Component {
     isRegistered: false
   }
 
+  componentDidMount() {
+    authService.getUser()
+      .then(
+          (user) => this.setState({ user: {...this.state.user, ...user} }),
+          (error) => console.error(error)
+        )
+  }
+
   handleChange = (event) => {
-    const { name, value } = event.target;
+    const { name, value, files } = event.target;
+    console.log('Files', files[0].name)
     this.setState({
       user: {
         ...this.state.user,
-        [name]: value
+        [name]: files && files[0] ? files[0] : name
       },
       errors: {
         ...this.state.errors,
@@ -72,6 +88,8 @@ class Register extends Component {
       }
     })
   }
+
+  isProducer = () => this.state.producer ==='PRODUCER';
 
   handleBlur = (event) => {
     const { name } = event.target;
@@ -86,23 +104,20 @@ class Register extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
     if (this.isValid()) {
-      authService.register(this.state.user)
-        .then(
-          (user) => this.setState({ isRegistered: true }),
-          (error) => {
-            const { message, errors } = error.response.data;
-            this.setState({
-              errors: {
-                ...errors,
-                password: !errors && message
-              },
-              touch: {
-                ...errors,
-                password: !errors && message
-              }
-            })
-          }
-        )
+      authService.editUser(this.state.user)
+      .then(
+        (user) => this.setState({ user: {...this.state.user, ...user} }),
+        (error) => {
+          const { message, errors } = error.response.data;
+          this.setState({
+            errors: {
+              ...this.state.errors,
+              ...errors,
+              email: !errors && message
+            }
+          })
+        }
+      )
     }
   }
 
@@ -119,19 +134,26 @@ class Register extends Component {
     }
 
     return (
-      <RegisterForm 
+        <ProfileForm 
         name={user.name} 
         email={user.email} 
         password={user.password} 
-        role={user.role} 
+        category={user.category}
+        deliverDay={user.deliverDay}
+        imageURL={user.imageURL}
+        attachment={user.attachment}
         touch={touch} 
         errors={errors}
         handleChange={this.handleChange}
         handleBlur={this.handleBlur}
         handleSubmit={this.handleSubmit}
         isValid={this.isValid}
+        isProducer={this.isProducer}
         />
   )}
-};
+}
 
-export default withAuthConsumer(Register);
+
+
+
+export default (withAuthConsumer(Profile));
