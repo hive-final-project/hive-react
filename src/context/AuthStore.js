@@ -2,13 +2,13 @@
 import React, { Component } from 'react'
 import { authService } from '../services/index'
 
-
+const CURRENT_USER_KEY = 'current-user';
 const AuthContext = React.createContext();
 
 class AuthStore extends Component {
 
   state = {
-    user: {}
+    user: JSON.parse(localStorage.getItem(CURRENT_USER_KEY) || '{}')
   }
   userChangeSubscription = {}
 
@@ -33,6 +33,7 @@ class AuthStore extends Component {
     return (
       <AuthContext.Provider value={{
         user: this.state.user,
+        onUserChanged: this.handleUserChange,
         isAuthenticated: this.isAuthenticated,
         isAdmin: this.isAdmin,
       }}>

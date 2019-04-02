@@ -1,0 +1,20 @@
+.intro-div {
+    padding-top: 30vh;
+    height: 15vh;
+    background-image: url("./images/intro_background.jpg");
+    background-size: cover;
+    opacity:0.3;
+}
+
+.home-div {
+    background-color: rgb(250, 241, 227);
+    height: 100vh;
+}
+
+.logo-image {
+    position: absolute;
+    top: 15vh;
+    left: 12vh;
+    z-index: 2;
+    height: 150px;
+}

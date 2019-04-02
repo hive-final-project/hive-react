@@ -8,9 +8,7 @@ import Badge from '@material-ui/core/Badge';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { fade } from '@material-ui/core/styles/colorManipulator';
-import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import { withStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
@@ -105,8 +103,12 @@ const styles = theme => ({
     
   },
   personalized:{
-    color: '#F9B233'
-}
+    color: '#F9B233',
+    paddingLeft: theme.spacing.unit
+  },
+  personalizedUser :{
+      paddingLeft: theme.spacing.unit* 3
+  }
 });
 
 class NavBar extends React.Component {
@@ -143,8 +145,11 @@ class NavBar extends React.Component {
 
   handleLogout = () => {
     authService.logout()
-      .then(() => authService.onUserChange(null))
-  }
+      .then(() => {
+          authService.onUserChange(null);
+          this.setState({ user: {} });
+        })
+    }
 
   render() {
     const { anchorEl, mobileMoreAnchorEl } = this.state;
@@ -152,19 +157,6 @@ class NavBar extends React.Component {
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-    const renderMenu = (
-        <MuiThemeProvider theme={theme}>
-            <Menu
-            anchorEl={anchorEl}
-            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-            open={isMenuOpen}
-            onClose={this.handleMenuClose}
-            >
-                <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
-            </Menu>
-        </MuiThemeProvider>
-    );
 
     const renderMobileMenu = (
     <MuiThemeProvider theme={theme}>
@@ -209,20 +201,14 @@ class NavBar extends React.Component {
       <MuiThemeProvider theme={theme}>
         <AppBar className={classes.personalized} position="fixed">
           <Toolbar>
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
-              <MenuIcon />
-            </IconButton>
             <Typography className={classes.personalized} variant="h6" noWrap>
                 HIVe
             </Typography>
-            
+            <Typography className={classes.personalizedUser} variant="h8" noWrap>
+                {this.state.user.name}
+            </Typography>
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
-              <IconButton color="inherit">
-                <Badge badgeContent={4} >
-                  <MailIcon />
-                </Badge>
-              </IconButton>
               <IconButton>
                 <Badge badgeContent={17} color="secondary">
                   <NotificationsIcon />
@@ -244,7 +230,6 @@ class NavBar extends React.Component {
             </div>
           </Toolbar>
         </AppBar>
-        {renderMenu}
         {renderMobileMenu}
         </MuiThemeProvider>
       </div>

@@ -1,20 +1,47 @@
-import React, { Component, Fragment } from 'react';
+import '../styles/home.css';
+
+import React, { Component } from 'react';
 import NavBar from './misc/NavBar';
+import { pics } from '../utils/imgProvider';
 
 import { withAuthConsumer } from '../context/AuthStore';
-
+import MenuUser from '../components/ui/MenuUser';
+import authService from '../services/auth-service';
 
 
 class Home extends Component {
+
+    state= {
+        user:{}
+    }
+
+    componentDidMount() {
+        authService.getUser()
+          .then(
+              (user) => this.setState({ user: {...this.state.user, ...user} }),
+              (error) => console.error(error)
+            )
+    }
+
+    isProducer = () => this.state.user.role === 'PRODUCER';
+  
+    isUser = () => this.state.user.role === 'USER';
+
     render(){
         return(
-            <Fragment>
+            <div className="home-div">
                 <NavBar /> 
-                            
-            </Fragment>
+                <div>
+                    <img className="logo-image" alt="logo" src={pics.logo} />
+                    <div className="intro-div">   
+                    </div>
+                </div>
+                { this.isUser && <MenuUser />}               
+            </div>
         );
     }
 }
 
 export default withAuthConsumer(Home);
 
+ 

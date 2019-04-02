@@ -2,7 +2,6 @@ import React from 'react'
 import { AuthContext } from '../context/AuthStore';
 import { Redirect, Route } from 'react-router-dom';
 
-
 const PrivateRoute = ({component: Component, ...rest}) => {
   return (
     <AuthContext.Consumer>
@@ -15,7 +14,7 @@ const PrivateRoute = ({component: Component, ...rest}) => {
             return <Redirect to="/forbidden" />; 
           }
         }
-        return <Redirect to="/" />; 
+        return <Redirect to="/login" />; 
       }}/>
       )}
     </AuthContext.Consumer>

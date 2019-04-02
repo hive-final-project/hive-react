@@ -75,7 +75,9 @@ class Login extends Component {
     if (this.isValid()) {
       authService.authenticate(this.state.user)
         .then(
-          (user) => this.setState({ isAuthenticated: true }),
+          (user) => this.setState({ isAuthenticated: true }, () => {
+            this.props.onUserChanged(user)
+          }),
           (error) => {
             const { message, errors } = error.response.data;
             this.setState({
@@ -100,9 +102,8 @@ class Login extends Component {
 
   render () {
 		const { isAuthenticated, errors, user, touch } = this.state;
-		
+		console.info('Auth => ', isAuthenticated)
 		if (isAuthenticated) {
-      console.log(isAuthenticated)
       return (<Redirect to="/" />)
     }
 
