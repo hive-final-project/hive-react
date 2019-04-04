@@ -16,13 +16,11 @@ const styles = theme => ({
 });
 
 function AlignItemsList(props) {
-  const { classes, elems } = props;
-
-  const listElem = () => elems && elems.map(e => <Item order={e.products}/>)
-
+  const { classes, orders } = props;
+  
   return (
     <List className={classes.root}>
-      {listElem()}
+      <Item classes={classes} orders={orders} />
     </List>
   );
 }

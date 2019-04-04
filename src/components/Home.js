@@ -7,6 +7,7 @@ import { pics } from '../utils/imgProvider';
 import { withAuthConsumer } from '../context/AuthStore';
 import MenuUser from '../components/ui/MenuUser';
 import authService from '../services/auth-service';
+import MenuProducer from './ui/MenuProducer';
 
 
 class Home extends Component {
@@ -35,8 +36,9 @@ class Home extends Component {
                     <img className="logo-image" alt="logo" src={pics.logo} />
                     <div className="intro-div">   
                     </div>
-                </div>
-                { this.isUser && <MenuUser />}               
+                </div> 
+                { this.isUser() && <MenuUser />}
+                { this.isProducer() && <MenuProducer />}             
             </div>
         );
     }

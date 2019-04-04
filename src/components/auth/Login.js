@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 
 import { Redirect } from 'react-router-dom';
 import authService from '../../services/auth-service';
-import { withAuthConsumer } from '../../context/AuthStore';
 import LoginForm from '../ui/LoginForm';
+import { withAuthConsumer } from '../../context/AuthStore';
 
 
 const emailRegEx = /(.+)@(.+){2,}\.(.+){2,}/i;
@@ -76,7 +76,7 @@ class Login extends Component {
       authService.authenticate(this.state.user)
         .then(
           (user) => this.setState({ isAuthenticated: true }, () => {
-            this.props.onUserChanged(user)
+            this.props.onUserChanged(user);
           }),
           (error) => {
             const { message, errors } = error.response.data;
@@ -102,7 +102,6 @@ class Login extends Component {
 
   render () {
 		const { isAuthenticated, errors, user, touch } = this.state;
-		console.info('Auth => ', isAuthenticated)
 		if (isAuthenticated) {
       return (<Redirect to="/" />)
     }
@@ -123,4 +122,4 @@ class Login extends Component {
 
 
 
-export default (withAuthConsumer(Login));
+export default withAuthConsumer(Login);

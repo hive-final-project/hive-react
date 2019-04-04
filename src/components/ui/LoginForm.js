@@ -12,6 +12,8 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { withStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import ImageAvatar from '../misc/ImageAvatar';
+import { pics } from '../../utils/imgProvider';
+import { Link } from 'react-router-dom';
 
 
 const styles = theme => ({
@@ -48,7 +50,11 @@ const styles = theme => ({
       margin: theme.spacing.unit,
       },
       input: {
-      margin: theme.spacing.unit,
+      margin: theme.spacing.unit
+    },
+    link: {
+      color: 'primary',
+      marginTop: theme.spacing.unit * 2,
     }
   });
   
@@ -66,23 +72,21 @@ const styles = theme => ({
   
   const LoginForm = ({
     classes,
-	email,
-	password,
-	errors,
-	touch,
-	handleChange,
-	handleBlur,
+	  email,
+	  password,
+	  errors,
+	  touch,
+	  handleChange,
+	  handleBlur,
     handleSubmit,
     isValid,
   }) => {
-
-
       return (
 
       <main className={classes.main}>
       <CssBaseline />
       <Paper className={classes.paper}>
-        <ImageAvatar image="./hive-logo.png"/>
+        <ImageAvatar image={pics.miniLogo}/>
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
@@ -103,11 +107,14 @@ const styles = theme => ({
               fullWidth
               variant="contained"
               color="primary"
-			  className={classes.submit}
-			  disabled={!isValid}
+			        className={classes.submit}
+			        disabled={!isValid}
             >
               Log in
             </Button>
+            <Typography className={classes.link} component="h8" variant="h7">
+              Don't have an account? <Link to="/register">Register now!</Link>
+            </Typography>
           </MuiThemeProvider>
         </form>
       </Paper>

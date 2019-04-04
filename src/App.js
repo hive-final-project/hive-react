@@ -1,3 +1,5 @@
+
+
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Login from './components/auth/Login';
@@ -5,6 +7,7 @@ import Register from './components/auth/Register';
 import PrivateRoute from './guards/PrivateRoute';
 import Home from './components/Home';
 import Profile from './components/auth/Profile';
+
 
 class App extends Component {
   render() {

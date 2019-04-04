@@ -1,5 +1,4 @@
 import React from 'react';
-
 import PropTypes from 'prop-types';
 import SwipeableViews from 'react-swipeable-views';
 import AppBar from '@material-ui/core/AppBar';
@@ -7,16 +6,10 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography'; 
 import authService from '../../services/auth-service';
-import AlignItemsList from './AlignItemsList';
 import { withStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import Divider from '@material-ui/core/Divider';
-import ButtonSuccess from '../misc/ButtonSuccess';
-import GoogleMapsContainer from '../misc/GoogleMapsContainer';
-import TitlebarGridList from '../misc/TitlebarGridList';
-
-import productService from '../../services/product-service';
 
 import { withAuthConsumer } from '../../context/AuthStore';
+import GoogleMapsContainer from '../misc/GoogleMapsContainer';
 
 const theme = createMuiTheme({
   palette: {
@@ -50,17 +43,16 @@ const styles = theme => ({
       main: '#6E8C13'  
     },
     secondary: {
-      main: '#F9B233'  
+      main: '#8ba342'  
     },
   },
 });
 
-class MenuUser extends React.Component {
+class MenuProducer extends React.Component {
   state = {
     value: 0,
-    user: {orders: []},
-    error: '',
-    products: []
+    user: {products: []},
+    error: ''
   };
 
   componentDidMount() {
@@ -79,22 +71,9 @@ class MenuUser extends React.Component {
     this.setState({ value: index });
   };
 
-  listProducts = () => {
-    productService.getAllProducts()
-    .then( 
-      (products) => {
-        console.log('products', products)
-        this.setState({ products: products})},
-      (error) => console.error(error)
-    )
-  }
-
 
   render() {
-    this.listProducts();
     const { classes } = this.props;
-    const prods = () => this.state.products.map(product => <TitlebarGridList product={product}/>)
-    
     return (
       <div className={classes.root}>
         <MuiThemeProvider theme={theme}>
@@ -106,9 +85,9 @@ class MenuUser extends React.Component {
             textColor="primary"
             variant="fullWidth"
           >
-            <Tab label="Last Orders" />
+            <Tab label="Orders to serve" />
             <Tab label="Products" />
-            <Tab label="Producers" />
+            <Tab label="Historic of orders" />
           </Tabs>
         </AppBar>
         <SwipeableViews
@@ -116,14 +95,9 @@ class MenuUser extends React.Component {
           index={this.state.value}
           onChangeIndex={this.handleChangeIndex}
         >
-          <TabContainer dir={theme.direction}><AlignItemsList orders={this.state.user.orders}/></TabContainer>
-          <TabContainer dir={theme.direction}>
-            Category
-            <Divider />
-            {prods()}
-            <ButtonSuccess />
-          </TabContainer>
+          <TabContainer dir={theme.direction}></TabContainer>
           <TabContainer dir={theme.direction}><GoogleMapsContainer /></TabContainer>
+          <TabContainer dir={theme.direction}>Item Three</TabContainer>
         </SwipeableViews>
         </MuiThemeProvider>
       </div>
@@ -132,9 +106,9 @@ class MenuUser extends React.Component {
   }
 }
 
-MenuUser.propTypes = {
+MenuProducer.propTypes = {
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(withAuthConsumer(MenuUser));
+export default withStyles(styles, { withTheme: true })(withAuthConsumer(MenuProducer));

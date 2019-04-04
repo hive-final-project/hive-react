@@ -9,13 +9,16 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import NotificationsIcon from '@material-ui/icons/Notifications';
+import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import { withStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import ImageAvatar from './ImageAvatar';
 
 import authService from '../../services/auth-service';
 import { withAuthConsumer } from '../../context/AuthStore';
+import { pics } from '../../utils/imgProvider';
+
 
 const theme = createMuiTheme({
     palette: {
@@ -49,30 +52,6 @@ const styles = theme => ({
       display: 'block',
     },
   },
-  search: {
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
-    '&:hover': {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
-    },
-    marginRight: theme.spacing.unit * 2,
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing.unit * 3,
-      width: 'auto',
-    },
-  },
-  searchIcon: {
-    width: theme.spacing.unit * 9,
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   inputRoot: {
     color: 'inherit',
     width: '100%',
@@ -104,10 +83,13 @@ const styles = theme => ({
   },
   personalized:{
     color: '#F9B233',
-    paddingLeft: theme.spacing.unit
+
   },
   personalizedUser :{
-      paddingLeft: theme.spacing.unit* 3
+      paddingLeft: theme.spacing.unit* 2
+  },
+  link:{
+    underline: 'none'
   }
 });
 
@@ -115,16 +97,7 @@ class NavBar extends React.Component {
   state = {
     anchorEl: null,
     mobileMoreAnchorEl: null,
-    user: {}
   };
-
-  componentDidMount() {
-    authService.getUser()
-      .then(
-          (user) => this.setState({ user: {...this.state.user, ...user} }),
-          (error) => console.error(error)
-        )
-  }
 
   handleProfileMenuOpen = event => {
     this.setState({ anchorEl: event.currentTarget });
@@ -146,9 +119,8 @@ class NavBar extends React.Component {
   handleLogout = () => {
     authService.logout()
       .then(() => {
-          authService.onUserChange(null);
-          this.setState({ user: {} });
-        })
+        this.props.onUserChanged({});
+      })
     }
 
   render() {
@@ -170,21 +142,18 @@ class NavBar extends React.Component {
 
         <MenuItem onClick={this.handleMobileMenuClose}>
           <IconButton color="inherit">
-            <Badge badgeContent={11} color="secondary">
-                <NotificationsIcon />
+            <Badge badgeContent={0} color="secondary">
+              <AddShoppingCartIcon />
             </Badge>
           </IconButton>
           <p>Order</p>
         </MenuItem>
-        <Link to='/profile' >
-            <MenuItem onClick={this.handleProfileMenuOpen}>
-                <IconButton color="inherit">
-                    <AccountCircle />
-                </IconButton>
-                <p>Profile</p>
-            </MenuItem>
-        </Link>
-
+          <MenuItem onClick={this.handleMobileMenuClose}>
+            <IconButton color="inherit">
+                <AccountCircle />
+            </IconButton>
+            <Link to='/profile' className={classes.link}><p>Profile</p></Link>
+          </MenuItem>
         <MenuItem onClick={this.handleLogout}>
             <IconButton color="inherit">
                 <AccountCircle />
@@ -202,22 +171,30 @@ class NavBar extends React.Component {
         <AppBar className={classes.personalized} position="fixed">
           <Toolbar>
             <Typography className={classes.personalized} variant="h6" noWrap>
-                HIVe
+                <Link to='/'><ImageAvatar image={pics.miniLogo} className={classes.avatar}/></Link>
             </Typography>
             <Typography className={classes.personalizedUser} variant="h8" noWrap>
-                {this.state.user.name}
+                {this.props.user.name}
             </Typography>
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
               <IconButton>
                 <Badge badgeContent={17} color="secondary">
-                  <NotificationsIcon />
+                  <AddShoppingCartIcon />
                 </Badge>
               </IconButton>
               <IconButton
                 aria-owns={isMenuOpen ? 'material-appbar' : undefined}
                 aria-haspopup="true"
                 onClick={this.handleProfileMenuOpen}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+              <IconButton
+                aria-owns={isMenuOpen ? 'material-appbar' : undefined}
+                aria-haspopup="true"
+                onClick={this.handleLogout}
                 color="inherit"
               >
                 <AccountCircle />

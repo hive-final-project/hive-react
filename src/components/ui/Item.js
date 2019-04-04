@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
@@ -8,24 +9,34 @@ import Typography from '@material-ui/core/Typography';
 
 
 const Item = (props) => {
-    const { classes, order, user } = props;
-    console.info('ORDER => ', order)
-    const orderProducts = () => order && order.products.map(prod => <Typography component="span" className={classes.inline} color="textPrimary">{prod}</Typography>)
-    return ( 
-    <ListItem alignItems="flex-start">
-    <ListItemAvatar>
-      <Avatar alt={user.name} src={user.imageURL} />
-    </ListItemAvatar>
-    <ListItemText
-      primary={order.user}
-      secondary={
+    const { classes, orders } = props;
+    const orderProducts = () => orders && orders.map(ord => 
+    <List key={ord.id} className={classes.root}>
+      <ListItem alignItems="flex-start">
+        <ListItemAvatar>
+          <Avatar alt="product" className={classes.bigAvatar} src="https://source.unsplash.com/random/?vegetables" />
+        </ListItemAvatar>
+        <ListItemText
+          primary={ord.updatedAt}
+          secondary={
+            <React.Fragment>
+              <Typography component="span" className={classes.inline} color="textPrimary">
+                status: {ord.served}
+              </Typography>
+                - Order id: {ord.id}
+          </React.Fragment>
+          }
+        />
+      </ListItem>
+    </List>
+    );
+      
+      return (
         <React.Fragment>
-            {orderProducts()}
-          {order.timestamps}
-        </React.Fragment>
-      }
-    />
-  </ListItem>);
+          {orderProducts()}
+        </React.Fragment> 
+  )
+
 }
 
 Item.propTypes = {
