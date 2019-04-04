@@ -174,15 +174,24 @@ const ProfileForm = ({
 							)}
 							{isProducer && (
 								<FormControl className={classes.formControl} margin="normal" fullWidth>
-									<InputLabel htmlFor="category">Category</InputLabel>
-									<Input
-										id="category"
-										name="category"
-										onChange={handleChange}
+								<InputLabel htmlFor="category">Category</InputLabel>
+                                <Select
 										value={category}
-										onBlur={handleBlur}
-									/>
-								</FormControl>
+										onChange={handleChange}
+										inputProps={{
+											name: 'category',
+											id: 'category'
+										}}
+									>
+										<MenuItem value={"veggie"}>
+											<em>Fruits and Vegetables</em>
+										</MenuItem>
+										<MenuItem value={"milky"}>Milk products</MenuItem>
+										<MenuItem value={"poultry"}>Poultry products</MenuItem>
+										<MenuItem value={"apiculture"}>Apiculture</MenuItem>
+										<MenuItem value={"butcher"}>Butcher products</MenuItem>
+									</Select>
+							</FormControl>
                             )}
                             <FormControl className={classes.formControl} margin="normal" fullWidth>
 								<InputLabel htmlFor="attachment">Change your profile image:</InputLabel>

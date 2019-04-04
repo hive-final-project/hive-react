@@ -76,11 +76,10 @@ class Profile extends Component {
 
   handleChange = (event) => {
     const { name, value, files } = event.target;
-    console.log('Files', files[0].name)
     this.setState({
       user: {
         ...this.state.user,
-        [name]: files && files[0] ? files[0] : name
+        [name]: files && files[0] ? files[0] : value
       },
       errors: {
         ...this.state.errors,

@@ -52,7 +52,7 @@ function TitlebarGridList(props) {
             <img src={product.imageURL} alt={product.name} />
             <GridListTileBar
               title={product.name}
-              subtitle={<span>price: {product.price}</span>}
+              subtitle={<span>price: {product.price} €</span>}
               actionIcon={
                 <IconButton className={classes.icon}>
                   <ButtonSuccess />

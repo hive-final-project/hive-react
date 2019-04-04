@@ -1,3 +1,5 @@
+import './prod.css'
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import SwipeableViews from 'react-swipeable-views';
@@ -6,10 +8,11 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography'; 
 import authService from '../../services/auth-service';
+import AlignItemsList from './AlignItemsList';
 import { withStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 import { withAuthConsumer } from '../../context/AuthStore';
-import GoogleMapsContainer from '../misc/GoogleMapsContainer';
+import NewProduct from '../prod/NewProduct';
 
 const theme = createMuiTheme({
   palette: {
@@ -20,7 +23,8 @@ const theme = createMuiTheme({
       main: '#8ba342'  
     },
   },
-  typography: { useNextVariants: true }
+  typography: { useNextVariants: true },
+
 });
 
 function TabContainer({ children, dir }) {
@@ -85,9 +89,9 @@ class MenuProducer extends React.Component {
             textColor="primary"
             variant="fullWidth"
           >
-            <Tab label="Orders to serve" />
+            <Tab label="Orders" />
             <Tab label="Products" />
-            <Tab label="Historic of orders" />
+            <Tab label="New Product" />
           </Tabs>
         </AppBar>
         <SwipeableViews
@@ -96,8 +100,8 @@ class MenuProducer extends React.Component {
           onChangeIndex={this.handleChangeIndex}
         >
           <TabContainer dir={theme.direction}></TabContainer>
-          <TabContainer dir={theme.direction}><GoogleMapsContainer /></TabContainer>
-          <TabContainer dir={theme.direction}>Item Three</TabContainer>
+          <TabContainer dir={theme.direction}></TabContainer>
+          <TabContainer dir={theme.direction}><NewProduct /></TabContainer>
         </SwipeableViews>
         </MuiThemeProvider>
       </div>

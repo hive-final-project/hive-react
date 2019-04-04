@@ -10,7 +10,6 @@ import authService from '../../services/auth-service';
 import AlignItemsList from './AlignItemsList';
 import { withStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
-import ButtonSuccess from '../misc/ButtonSuccess';
 import GoogleMapsContainer from '../misc/GoogleMapsContainer';
 import TitlebarGridList from '../misc/TitlebarGridList';
 
@@ -66,7 +65,10 @@ class MenuUser extends React.Component {
   componentDidMount() {
     authService.getUser()
       .then(
-          (user) => this.setState({ user: {...user} }),
+          (user) => {
+          this.listProducts();
+          this.setState({ user: {...user} });
+          },
           (error) => console.error(error)
         )
   }
@@ -82,16 +84,15 @@ class MenuUser extends React.Component {
   listProducts = () => {
     productService.getAllProducts()
     .then( 
-      (products) => {
-        console.log('products', products)
-        this.setState({ products: products})},
+      (products) => this.setState({ products: products}),
       (error) => console.error(error)
     )
   }
 
 
+
   render() {
-    this.listProducts();
+
     const { classes } = this.props;
     const prods = () => this.state.products.map(product => <TitlebarGridList product={product}/>)
     
@@ -120,8 +121,7 @@ class MenuUser extends React.Component {
           <TabContainer dir={theme.direction}>
             Category
             <Divider />
-            {prods()}
-            <ButtonSuccess />
+            {this.state.products && prods()}
           </TabContainer>
           <TabContainer dir={theme.direction}><GoogleMapsContainer /></TabContainer>
         </SwipeableViews>
