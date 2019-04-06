@@ -21,7 +21,11 @@ class NewProduct extends Component {
       price: 0,
       amount: '',
       description:'',
-      active: true
+      active: true,
+      errors: {
+        name: true
+      },
+      touch: {},
     },
     saved: false
   }
@@ -39,7 +43,7 @@ class NewProduct extends Component {
     this.setState({
       product: {
         ...this.state.product,
-        [name]: files && files[0] ? files[0].name : value
+        [name]: (files && files[0]) ? files[0].name : value
       },
     })
   }
@@ -74,7 +78,7 @@ class NewProduct extends Component {
 
   render () {
         const { product } = this.state;
-        
+        if (this.state.saved) { return <Redirect to='/' />}
 
     return (
         <NewProductForm 

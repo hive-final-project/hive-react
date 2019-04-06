@@ -6,6 +6,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
+import moment from 'moment'
 
 
 const Item = (props) => {
@@ -17,13 +18,13 @@ const Item = (props) => {
           <Avatar alt="product" className={classes.bigAvatar} src="https://source.unsplash.com/random/?vegetables" />
         </ListItemAvatar>
         <ListItemText
-          primary={ord.updatedAt}
+          primary={moment(ord.updatedAt).format('YYYY-MM-DD')}
           secondary={
             <React.Fragment>
               <Typography component="span" className={classes.inline} color="textPrimary">
                 status: {ord.served}
               </Typography>
-                - Order id: {ord.id}
+                 - Order id: {ord.id}
           </React.Fragment>
           }
         />

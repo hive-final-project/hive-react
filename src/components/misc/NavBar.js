@@ -139,14 +139,6 @@ class NavBar extends React.Component {
         onClose={this.handleMenuClose}
       >
 
-        <MenuItem onClick={this.handleMobileMenuClose}>
-          <IconButton color="inherit">
-            <Badge badgeContent={0} color="secondary">
-              <AddShoppingCartIcon />
-            </Badge>
-          </IconButton>
-          <p>Order</p>
-        </MenuItem>
           <MenuItem onClick={this.handleMobileMenuClose}>
             <IconButton color="inherit">
                 <AccountCircle />
@@ -177,11 +169,6 @@ class NavBar extends React.Component {
             </Typography>
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
-              <IconButton>
-                <Badge badgeContent={17} color="secondary">
-                  <AddShoppingCartIcon />
-                </Badge>
-              </IconButton>
               <IconButton
                 aria-owns={isMenuOpen ? 'material-appbar' : undefined}
                 aria-haspopup="true"

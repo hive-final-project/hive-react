@@ -5,9 +5,9 @@ import NavBar from './misc/NavBar';
 import { pics } from '../utils/imgProvider';
 
 import { withAuthConsumer } from '../context/AuthStore';
-import MenuUser from '../components/ui/MenuUser';
+import MenuUser from '../components/menus/MenuUser';
 import authService from '../services/auth-service';
-import MenuProducer from './ui/MenuProducer';
+import MenuProducer from '../components/menus/MenuProducer';
 
 
 class Home extends Component {

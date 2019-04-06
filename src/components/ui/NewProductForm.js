@@ -11,6 +11,8 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
 import { withStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
@@ -78,7 +80,8 @@ const NewProductForm = ({
     price,
     amount,
     category,
-    description,
+	description,
+	active,
 	handleChange,
     handleSubmit,
 }) => {
@@ -150,6 +153,17 @@ const NewProductForm = ({
 									value={attachment}
 								/>
 							</FormControl>
+							<FormControlLabel
+          						control={
+            					<Checkbox
+              						checked={active}
+              						onChange={handleChange}
+              						value="active"
+              						color="primary"
+           						/>
+          						}
+          						label="Active"
+       						/>
 							<Button
 								type="submit"
 								fullWidth
