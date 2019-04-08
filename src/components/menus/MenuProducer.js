@@ -14,6 +14,7 @@ import { withStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core/
 import { withAuthConsumer } from '../../context/AuthStore';
 import NewProduct from '../prod/NewProduct';
 import TitlebarGridList from '../misc/TitlebarGridList';
+import orderService from '../../services/order-service';
 
 const theme = createMuiTheme({
   palette: {
@@ -62,6 +63,7 @@ class MenuProducer extends React.Component {
   };
 
   componentDidMount() {
+    this.getProducerOrders()
     authService.getUser()
       .then(
           (user) => this.setState({ user: {...user} }),
@@ -76,6 +78,14 @@ class MenuProducer extends React.Component {
   handleChangeIndex = index => {
     this.setState({ value: index });
   };
+
+  getProducerOrders = () => {
+    orderService.listOrders()
+    .then(
+      (orders) => this.setState({ orders: orders}),
+      (error) => console.error(error)
+    )
+  }
 
 
   render() {
@@ -101,7 +111,7 @@ class MenuProducer extends React.Component {
           index={this.state.value}
           onChangeIndex={this.handleChangeIndex}
         >
-          <TabContainer dir={theme.direction}><AlignItemsList orders={this.orders} /></TabContainer>
+          <TabContainer dir={theme.direction}><AlignItemsList orders={this.state.orders} /></TabContainer>
           <TabContainer dir={theme.direction}><TitlebarGridList products={this.state.user.products} /></TabContainer>
           <TabContainer dir={theme.direction}><NewProduct /></TabContainer>
         </SwipeableViews>

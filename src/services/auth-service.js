@@ -15,8 +15,18 @@ const register = (user) => http.post('/register', user)
 const getUser = () => http.get('/profile')
   .then(response => response.data);
 
-const editUser = (user) => http.put('/profile', user)
-  .then(response => response.data);
+const editUser = (user) => {
+  const data = new FormData();
+  Object.keys(user).forEach(prop => {
+    if (prop === 'location' || prop === 'orders' || prop === 'products' || prop === 'role') {
+      return;
+    };
+    if (prop === 'password' && user.password === '') return;
+    data.append(prop, user[prop])
+  });
+  return http.put('/profile', data)
+    .then(response => response.data)
+};
  
 const logout = () => http.get('/logout')
 .then(response => {

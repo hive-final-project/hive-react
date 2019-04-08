@@ -19,7 +19,7 @@ const ImageAvatar = ({classes, image}) => {
 
   return (
     <Grid container justify="center" alignItems="center">
-      <Avatar alt="Remy Sharp" src={image} className={classes} />
+      <Avatar alt="Remy Sharp" src={image} />
     </Grid>
   );
 }

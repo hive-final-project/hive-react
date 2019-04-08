@@ -85,15 +85,15 @@ const ProfileForm = ({
 	email,
 	name,
 	password,
-    imageURL,
-    attachment,
+	imageURL,
+	otherInfo,
 	errors,
 	touch,
 	deliverDay,
 	category,
 	handleChange,
 	handleBlur,
-    handleSubmit,
+	handleSubmit,
     isValid,
 	isProducer
 }) => {
@@ -151,6 +151,17 @@ const ProfileForm = ({
 									{touch.email && errors.password}
 								</FormHelperText>
 							</FormControl>
+							<FormControl className={classes.formControl} margin="normal" fullWidth>
+								<InputLabel htmlFor="otherInfo">Other info:</InputLabel>
+								<Input
+									id="otherInfo"
+									name="otherInfo"
+									autoComplete="otherInfo"
+									onChange={handleChange}
+									value={otherInfo}
+									onBlur={handleBlur}
+								/>
+							</FormControl>
 							{isProducer && (
 								<FormControl className={classes.formControl} fullWidth>
 									<InputLabel htmlFor="deliverDay">Deliver day:</InputLabel>
@@ -200,16 +211,15 @@ const ProfileForm = ({
                                     name="attachment"
 									type="file"
 									onChange={handleChange}
-									value={attachment}
 									onBlur={handleBlur}
 								/>
 								<FormHelperText id="component-error-text" error>
 									{touch.email && errors.name}
 								</FormHelperText>
 							</FormControl>
+							<FormControl className={classes.formControl} margin="normal" fullWidth>
 							<Button
 								type="submit"
-								fullWidth
 								variant="contained"
 								color="primary"
 								className={classes.submit}
@@ -217,6 +227,7 @@ const ProfileForm = ({
 							>
 								Edit Profile
 							</Button>
+							</FormControl>
 						</MuiThemeProvider>
 					</form>
 				</Paper>

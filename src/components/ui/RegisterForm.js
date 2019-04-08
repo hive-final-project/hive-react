@@ -157,9 +157,9 @@ const RegisterForm = ({
 								<MenuItem value={'PRODUCER'}>Producer</MenuItem>
 							</Select>
 						</FormControl>
+						<FormControl className={classes.formControl} fullWidth>
 						<Button
 							type="submit"
-							fullWidth
 							variant="contained"
 							color="primary"
 							className={classes.submit}
@@ -167,6 +167,7 @@ const RegisterForm = ({
 						>
 							Register
 						</Button>
+						</FormControl>
 					</MuiThemeProvider>
 				</form>
 			</Paper>

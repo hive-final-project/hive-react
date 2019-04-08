@@ -4,13 +4,13 @@ import { Redirect } from 'react-router-dom';
 import authService from '../../services/auth-service';
 import { withAuthConsumer } from '../../context/AuthStore';
 
-import NewProductForm from '../ui/NewProductForm';
+import EditProductForm from '../ui/EditProductForm';
 import { productService } from '../../services';
 import MediaCard from './MediaCard';
 
 
 
-class NewProduct extends Component {
+class EditProduct extends Component {
 
 	state = {
     product: {
@@ -32,15 +32,12 @@ class NewProduct extends Component {
   }
 
   componentDidMount() {
-    authService.getUser()
-      .then(
-          (user) => this.setState({ user: {...this.state.user, ...user} }),
-          (error) => console.error(error)
-        )
+    console.log('PROPS PRODUCT',this.props.product)
+    this.setState({ product: this.props.product })
   }
 
   handleChange = (event) => {
-    const { name, value, files } = event.target;
+    const { name, value} = event.target;
     this.setState({
       product: {
         ...this.state.product,
@@ -59,6 +56,7 @@ class NewProduct extends Component {
     })
   }
 
+
   handleBlur = (event) => {
     const { name } = event.target;
     this.setState({
@@ -71,7 +69,7 @@ class NewProduct extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    console.log(this.state.product)
+
     productService.newProduct(this.state.product)
       .then(
         (product) => this.setState({ product: {...this.state.product, ...product}, saved: true }),
@@ -95,7 +93,7 @@ class NewProduct extends Component {
     }
 
     return (
-        <NewProductForm 
+        <EditProductForm
         name={product.name}
         category={product.category}
         attachment={product.attachment}
@@ -113,4 +111,4 @@ class NewProduct extends Component {
 
 
 
-export default (withAuthConsumer(NewProduct));
+export default (withAuthConsumer(EditProduct));

@@ -9,13 +9,28 @@ import InfoIcon from '@material-ui/icons/Info';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import SearchBar from './SearchBar'; 
 import Product from '../prod/Product';
+import { withAuthConsumer } from '../../context/AuthStore';
 
+
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+
+
+const theme = createMuiTheme({
+	palette: {
+		primary: {
+			main: '#6E8C13'
+		},
+		secondary: {
+			main: '#F9B233'
+		}
+	},
+	typography: { useNextVariants: true }
+});
 
 const styles = theme => ({
   root: {
     display: 'flex',
     flexWrap: 'wrap',
-    // justifyContent: 'space-around',
     overflow: 'hidden',
     backgroundColor: theme.palette.background.paper,
   },
@@ -23,50 +38,64 @@ const styles = theme => ({
     width: 450,
     height: 450,
   },
-  // icon: {
-  //   color: 'rgba(255, 255, 255, 0.54)',
-  // },
-  // tile:{
-  //   width: '100%'
-  // },
-  
+  icon: {
+    color: '#F9B233',
+  }
 });
 
 class TitlebarGridList extends Component {
 
   state={
     products: [],
-    singleProd: ''
+    singleProd: '',
+    search: '',
+    order: {
+      user: this.props.user,
+      products: [],
+      price: 0,
+      served: false
+    }
   }
 
-  componentDidMount() {
-    this.setState({ products: this.props.products })
+  componentDidUpdate(prevProps) {
+    if(prevProps.products !== this.props.products) {
+      this.setState({ products: this.props.products }, () => console.info(this.state.products))
+    }
   }
 
-  onFilter = (search) => {
-    const newProducts = this.props.products.filter(prod => prod.name.toLowerCase().includes(search.toLowerCase()));
-    this.setState({ products: newProducts});
-  }
+  onChangeSearch = event => this.setState({ search: event.target.value })
 
-  handleClick = (product) => {
-    this.setState({ singleProd: product })
+  onFilter = () => 
+    this.state.products.filter(prod => prod.name.toLowerCase().includes(this.state.search.toLowerCase()));
+
+  handleClick = id => {
+
+    this.setState({ singleProd: id })
   } 
+
+  handleSubmit = (event) => {
+
+  }
+
+  categoryFilter = (category) => {
+  }
 
   render(){
   const { classes, products, category } = this.props;
-  console.log(this.state.singleProd);
+
   if (this.state.singleProd){ 
     return (<Product product={this.state.singleProd}/>)
   }
 
   return (
     <div className={classes.root}>
-      <SearchBar onFiler={this.onFilter}/>
+      <form className={classes.form} onSubmit={this.handleSubmit}>
+      <SearchBar onChangeSearch={this.onChangeSearch}/>
       <GridList cellHeight={180} className={classes.gridList}>
         <GridListTile key="Subheader" cols={2} style={{ height: 'auto' }}>
           <ListSubheader component="div"> { category }</ListSubheader>
         </GridListTile>
-        {products && products.map(product =>(
+        {products && this.onFilter().map(product =>(
             <GridListTile cols={2} className={classes.tile} key={product.id}>
             <img src={product.imageURL} alt={product.name} />
             <GridListTileBar
@@ -75,21 +104,27 @@ class TitlebarGridList extends Component {
             actionIcon={
               <Chip 
                 className={classes.icon}
-                onClick={this.handleClick(product.id)}
+                value={product.id}
+                onClick={() => this.handleClick(product.id)}
+                color="secondary"
+                variant="outlined"
+                label="Info"
                 icon={<InfoIcon />}>
+                
               </Chip>
             }
             />
             </GridListTile>
         ))}
       </GridList>
+      </form>
     </div>
   );
-          }
+  }
 }
 
 TitlebarGridList.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(TitlebarGridList);
+export default withStyles(styles)(withAuthConsumer(TitlebarGridList));

@@ -10,11 +10,14 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from '@material-ui/core/Typography';
+import Collapse from '@material-ui/core/Collapse';
 
 import { productService } from '../../services';
 import { withAuthConsumer } from '../../context/AuthStore';
-import NewProduct from './NewProduct';
-
+import EditProduct from './EditProduct';
+import DialogClass from '../ui/DialogClass';
+import DeleteIcon from '@material-ui/icons/Delete';
+import red from '@material-ui/core/colors/red';
 
 const styles = theme => ({
   card: {
@@ -37,6 +40,9 @@ const styles = theme => ({
   expandOpen: {
     transform: 'rotate(180deg)',
   },
+  avatar: {
+    backgroundColor: red[500],
+  }
 
 });
 
@@ -48,6 +54,7 @@ class Product extends React.Component {
     };
 
   componentDidMount(){
+      this.setState({ edit: false })
       this.productInfo()
   };
 
@@ -59,26 +66,40 @@ class Product extends React.Component {
     productService.getProduct(this.props.product)
     .then( 
         (product) => {
-          this.setState({ product: product })
+          this.setState({ product }, () => console.info('PRODUCT => ', this.state.product))
         },
         (error) => console.error(error)
       )
   };
 
   isProducer = () => {
-      return this.props.user.role == 'PRODUCER';
+      return this.props.user.role === 'PRODUCER';
   };
 
   handleClick = () => {
       this.setState({ edit: true })
   }
 
+  handleDelete = () => {
+    productService.deleteProduct(this.state.product.id)
+    .then(
+      (message) => {this.setState({ product: {} })},
+      (error) => console.error(error)
+    )
+  }
+
+  handleActivate = () => {
+    if (this.state.product.active){
+      this.setState({product : { active: false}})
+    } else this.setState({product: { active: true }})
+  }
+
   render() {
     const { classes } = this.props;
     const { product } = this.state;
-    console.log('product', product)
+
     if ( this.state.edit ){
-        return (<NewProduct />)
+        return (<EditProduct product={product}/>)
     }
     return (
       <Card className={classes.card}>
@@ -91,16 +112,54 @@ class Product extends React.Component {
           image={product.imageURL}
           title={product.name}
         />
-        <CardContent>
-          <Typography component="p">
-            {product.description}
-          </Typography>
-        </CardContent>
+ 
+        <IconButton
+            className={classnames(classes.expand, {
+              [classes.expandOpen]: this.state.expanded,
+            })}
+            onClick={this.handleExpandClick}
+            aria-expanded={this.state.expanded}
+            aria-label="Show more"
+          >
+            <ExpandMoreIcon />
+        </IconButton>
+        <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>  
+        <CardMedia
+          className={classes.media}
+          image={product.user && product.user.imageURL}
+          title={product.user && product.user.name}
+        />
+          <CardContent>
+            <Typography component="p">
+              {product.user && product.user.name}
+            </Typography>
+          </CardContent>
+          <CardContent>
+            <Typography component="p">
+              {product.user && product.user.otherInfo}
+            </Typography>
+          </CardContent>
+        </Collapse>
         {this.isProducer() && 
-            <Button size="small" color="primary" onClick={this.handleClick()}>
+            <Button size="small" color="primary" onClick={this.handleClick}>
              Edit
             </Button>
-    }
+        }
+        {this.isProducer() && 
+            <Button size="small" color="primary" onClick={this.handleDelete}>
+              <DeleteIcon />
+            </Button>
+        }
+        {this.isProducer() && product.active &&
+            <Button size="small" color="primary" onClick={this.handleActivate}>
+             Deactivate
+            </Button>
+        }
+        {this.isProducer() && !product.active &&
+            <Button size="small" color="primary" onClick={this.handleActivate}>
+             Activate
+            </Button>
+        }
       </Card>
     );
   }

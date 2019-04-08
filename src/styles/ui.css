@@ -1,7 +1,12 @@
-body {
+ body {
     background-image: url("./images/eco-friendly-food.jpg");
     background-color: '#6E8C13';
     background-repeat: no-repeat;
     background-size: cover;
     height: 100vh;    
 }
+
+input#attachment{
+    color: transparent;
+    opacity: 0;
+};

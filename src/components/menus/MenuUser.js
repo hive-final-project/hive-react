@@ -66,8 +66,8 @@ class MenuUser extends React.Component {
     authService.getUser()
       .then(
           (user) => {
-          this.listProducts();
-          this.setState({ user: {...user} });
+            this.listProducts();
+            this.setState({ user: {...user} });
           },
           (error) => console.error(error)
         )
@@ -94,10 +94,7 @@ class MenuUser extends React.Component {
 
 
   render() {
-
     const { classes } = this.props;
-    
-    
     return (
       <div className={classes.root}>
         <MuiThemeProvider theme={theme}>

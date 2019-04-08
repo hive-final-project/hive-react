@@ -50,19 +50,8 @@ const styles = theme => ({
 
 class SearchBar extends Component {
 
-    state = {
-        search: ''
-    }
-
-    onChange = (event) => {
-        this.props.onFilter(event.target.value);
-        this.setState({
-          search: event.target.value
-        });
-    }
-
     render(){
-    const { classes } = this.props;
+    const { classes, onChangeSearch } = this.props;
     return(
         <div className={classes.search}>
             <div className={classes.searchIcon}>
@@ -70,13 +59,11 @@ class SearchBar extends Component {
             </div>
             <InputBase
                 placeholder="Search…"
-                type="text"
                 classes={{
                   root: classes.inputRoot,
                   input: classes.inputInput,
                 }}
-                value={this.state.search}
-                onChange={this.onChange} 
+                onChange={onChangeSearch} 
               />
       </div>
     );

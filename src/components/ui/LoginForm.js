@@ -86,8 +86,10 @@ const styles = theme => ({
       <main className={classes.main}>
       <CssBaseline />
       <Paper className={classes.paper}>
-        <ImageAvatar image={pics.miniLogo}/>
+        <br />
+        <ImageAvatar image={pics.miniLogo} classes={classes.bigAvatar}/>
         <Typography component="h1" variant="h5">
+        <br />
           Sign in
         </Typography>
         <form className={classes.form} onSubmit={handleSubmit}>
@@ -102,9 +104,9 @@ const styles = theme => ({
               <Input name="password" type="password" id="password" onChange={handleChange} value={password} onBlur={handleBlur}/>
 						  <FormHelperText id="component-error-text" error>{touch.email && errors.password}</FormHelperText>
           </FormControl>
+          <FormControl className={classes.formControl} margin="normal" fullWidth>
             <Button
               type="submit"
-              fullWidth
               variant="contained"
               color="primary"
 			        className={classes.submit}
@@ -112,6 +114,7 @@ const styles = theme => ({
             >
               Log in
             </Button>
+            </FormControl>
             <Typography className={classes.link} component="h8" variant="h7">
               Don't have an account? <Link to="/register">Register now!</Link>
             </Typography>

@@ -15,6 +15,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 
 import { withStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import ImageAvatar from '../misc/ImageAvatar';
 
 const theme = createMuiTheme({
 	palette: {
@@ -74,25 +75,26 @@ const styles = (theme) => ({
 });
 
 
-const NewProductForm = ({
+const EditProductForm = ({
 	classes,
 	name,
     price,
     amount,
+    imageURL,
     category,
 	description,
 	active,
 	handleChange,
 	handleSubmit,
 	handleFile,
-	handleCheck
 }) => {
 	return(
             <main className={classes.main}>
 				<CssBaseline />
 				<Paper className={classes.paper}>
+                    <ImageAvatar image={imageURL} className={classes.bigAvatar} />
 					<Typography component="h1" variant="h5">
-						New product:
+						Edit product:
 					</Typography>
 					<form className={classes.form} onSubmit={handleSubmit}>
 						<MuiThemeProvider theme={theme}>
@@ -164,6 +166,20 @@ const NewProductForm = ({
 									onChange={handleFile}
 								/>
 							</FormControl>
+							<FormControlLabel
+								className={classes.formControl}
+								margin="normal"
+								fullWidth
+          						control={
+            					<Checkbox
+              						checked={active}
+              						onChange={handleChange}
+              						value="active"
+              						color="primary"
+           						/>
+          						}
+          						label="Active"
+       						/>
 							<FormControl className={classes.formControl} margin="normal" fullWidth>
 							<Button
 								type="submit"
@@ -181,8 +197,8 @@ const NewProductForm = ({
 	);
 };
 
-NewProductForm.propTypes = {
+EditProductForm.propTypes = {
 	classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(NewProductForm);
+export default withStyles(styles)(EditProductForm);

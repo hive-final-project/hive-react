@@ -79,7 +79,7 @@ class Profile extends Component {
     this.setState({
       user: {
         ...this.state.user,
-        [name]: files && files[0] ? files[0] : value
+        [name]: files? files[0] : value
       },
       errors: {
         ...this.state.errors,
@@ -102,22 +102,20 @@ class Profile extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    if (this.isValid()) {
-      authService.editUser(this.state.user)
-      .then(
-        (user) => this.setState({ user: {...this.state.user, ...user} }),
-        (error) => {
-          const { message, errors } = error.response.data;
-          this.setState({
-            errors: {
-              ...this.state.errors,
-              ...errors,
-              email: !errors && message
-            }
-          })
-        }
-      )
-    }
+    authService.editUser(this.state.user)
+    .then(
+      (user) => this.setState({ user: {...this.state.user, ...user} , isRegistered: true}),
+      (error) => {
+        const { message, errors } = error.response.data;
+        this.setState({
+          errors: {
+            ...this.state.errors,
+            ...errors,
+            email: !errors && message
+          }
+        })
+      }
+    )
   }
 
   isValid = () => {
@@ -126,10 +124,11 @@ class Profile extends Component {
   }
 
   render () {
-		const { isRegistered, errors, user, touch } = this.state;
-		
+    
+    const { isRegistered, errors, user, touch } = this.state;
+		console.log('isRegistered', isRegistered)    
 		if (isRegistered) {
-      return (<Redirect to="/login" />)
+      return (<Redirect to="/" />)
     }
 
     return (
@@ -140,7 +139,7 @@ class Profile extends Component {
         category={user.category}
         deliverDay={user.deliverDay}
         imageURL={user.imageURL}
-        attachment={user.attachment}
+        otherInfo={user.otherInfo}
         touch={touch} 
         errors={errors}
         handleChange={this.handleChange}
