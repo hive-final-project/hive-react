@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
 
-import authService from '../../services/auth-service';
 import { withAuthConsumer } from '../../context/AuthStore';
 
 import EditProductForm from '../ui/EditProductForm';
@@ -72,7 +70,10 @@ class EditProduct extends Component {
 
     productService.newProduct(this.state.product)
       .then(
-        (product) => this.setState({ product: {...this.state.product, ...product}, saved: true }),
+        (product) => {
+            this.setState({ product: {...this.state.product, ...product}, saved: true })
+            this.props.goBack();
+            },
         (error) => {
           const { message, errors } = error.response.data;
           this.setState({
@@ -85,8 +86,9 @@ class EditProduct extends Component {
         })
     }
 
-  render () {
-    const { product,saved } = this.state;
+  render () { 
+
+    const { product, saved } = this.state;
 
     if (saved) {
     return (<MediaCard product={product}/>)

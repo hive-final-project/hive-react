@@ -10,22 +10,12 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import SearchBar from './SearchBar'; 
 import Product from '../prod/Product';
 import { withAuthConsumer } from '../../context/AuthStore';
+import Button from '@material-ui/core/Button';
+import Order from '../order/Order';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
+import { orderService } from '../../services';
 
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-
-
-const theme = createMuiTheme({
-	palette: {
-		primary: {
-			main: '#6E8C13'
-		},
-		secondary: {
-			main: '#F9B233'
-		}
-	},
-	typography: { useNextVariants: true }
-});
 
 const styles = theme => ({
   root: {
@@ -54,7 +44,8 @@ class TitlebarGridList extends Component {
       products: [],
       price: 0,
       served: false
-    }
+    },
+    preview: false
   }
 
   componentDidUpdate(prevProps) {
@@ -69,27 +60,41 @@ class TitlebarGridList extends Component {
     this.state.products.filter(prod => prod.name.toLowerCase().includes(this.state.search.toLowerCase()));
 
   handleClick = id => {
-
     this.setState({ singleProd: id })
   } 
 
-  handleSubmit = (event) => {
-
+  goBack = () => {
+    this.setState({ singleProd: ''})
+  }
+  
+  addToCart = (product, units) => {
+    this.setState({ order: { products:  [...this.state.order.products, {product, units}] }}, ()=> console.log(this.state.products))
   }
 
-  categoryFilter = (category) => {
+  previewOrder = (order) => {
+    orderService.newOrder(order)
+    .then(
+      (response) => { this.setState({ preview: true })},
+      (error) => console.error(error)
+    )
   }
 
   render(){
   const { classes, products, category } = this.props;
-
+  console.log('order',this.state.order)
   if (this.state.singleProd){ 
-    return (<Product product={this.state.singleProd}/>)
+    return (<Product product={this.state.singleProd} goBack={this.goBack} addToCart={this.addToCart}/>)
   }
+  if (this.state.preview){
+    return (<Order order={this.state.order} />)
+  }
+
+  // if (this.state.products.length === 0){
+  //   return (<CircularProgress className={classes.progress} color='#8ba342'  />)
+  // }
 
   return (
     <div className={classes.root}>
-      <form className={classes.form} onSubmit={this.handleSubmit}>
       <SearchBar onChangeSearch={this.onChangeSearch}/>
       <GridList cellHeight={180} className={classes.gridList}>
         <GridListTile key="Subheader" cols={2} style={{ height: 'auto' }}>
@@ -110,14 +115,15 @@ class TitlebarGridList extends Component {
                 variant="outlined"
                 label="Info"
                 icon={<InfoIcon />}>
-                
               </Chip>
             }
             />
             </GridListTile>
         ))}
       </GridList>
-      </form>
+      <Button variant="contained" color="primary" fullWidth onClick={this.previewOrder}>
+          Preview order
+      </Button>
     </div>
   );
   }
@@ -127,4 +133,4 @@ TitlebarGridList.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(withAuthConsumer(TitlebarGridList));
+export default withStyles(styles, { withTheme: true })(withAuthConsumer(TitlebarGridList));

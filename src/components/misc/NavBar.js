@@ -83,7 +83,8 @@ const styles = theme => ({
 
   },
   personalizedUser :{
-      paddingLeft: theme.spacing.unit* 2
+      paddingLeft: theme.spacing.unit* 2,
+      color: '#F9B233'
   },
   link:{
     underline: 'none'
@@ -162,7 +163,7 @@ class NavBar extends React.Component {
             <Typography className={classes.personalized} variant="h6" noWrap>
                 <Link to='/'><ImageAvatar image={pics.miniLogo} className={classes.avatar}/></Link>
             </Typography>
-            <Typography className={classes.personalizedUser} variant="h8" noWrap>
+            <Typography className={classes.personalizedUser} variant="subtitle1" noWrap>
                 {this.props.user.name}
             </Typography>
             <div className={classes.grow} />

@@ -15,7 +15,7 @@ const Item = (props) => {
     <List key={ord.id} className={classes.root}>
       <ListItem alignItems="flex-start">
         <ListItemAvatar>
-          <Avatar alt="product" className={classes.bigAvatar} src="https://source.unsplash.com/random/?vegetables" />
+          <Avatar alt="product" className={classes.bigAvatar} src={ord.user.imageURL} />
         </ListItemAvatar>
         <ListItemText
           primary={moment(ord.updatedAt).format('YYYY-MM-DD')}

@@ -11,11 +11,11 @@ import IconButton from '@material-ui/core/IconButton';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from '@material-ui/core/Typography';
 import Collapse from '@material-ui/core/Collapse';
+import TextField from '@material-ui/core/TextField';
 
 import { productService } from '../../services';
 import { withAuthConsumer } from '../../context/AuthStore';
 import EditProduct from './EditProduct';
-import DialogClass from '../ui/DialogClass';
 import DeleteIcon from '@material-ui/icons/Delete';
 import red from '@material-ui/core/colors/red';
 
@@ -42,15 +42,24 @@ const styles = theme => ({
   },
   avatar: {
     backgroundColor: red[500],
+  },
+  textField: {
+    marginLeft: theme.spacing.unit * 2,
+    marginRight: theme.spacing.unit *2 ,
+    width: 100,
+  },
+  button: {
+    float: "right",
+    margin: "auto"
   }
-
 });
 
 class Product extends React.Component {
   state = { 
       expanded: false,
       product: {},
-      edit: false
+      edit: false,
+      units: ''
     };
 
   componentDidMount(){
@@ -88,18 +97,26 @@ class Product extends React.Component {
     )
   }
 
+  goBack = () => {
+    this.setState({ edit: false })
+  }
+
   handleActivate = () => {
     if (this.state.product.active){
       this.setState({product : { active: false}})
     } else this.setState({product: { active: true }})
+  };
+
+  handleChange = (event) => {
+    this.setState({ units: event.target.value })
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, goBack, addToCart } = this.props;
     const { product } = this.state;
 
     if ( this.state.edit ){
-        return (<EditProduct product={product}/>)
+        return (<EditProduct product={product} goBack={this.goBack}/>)
     }
     return (
       <Card className={classes.card}>
@@ -160,6 +177,24 @@ class Product extends React.Component {
              Activate
             </Button>
         }
+        {!this.isProducer() && 
+          <TextField
+          id="standard-number"
+          label="Units"
+          value={this.state.units}
+          onChange={this.handleChange}
+          type="number"
+          className={classes.textField}
+        />
+        }
+        {!this.isProducer() && 
+          <Button className={classes.bigButton} variant="contained" color="primary" onClick={() => addToCart(product.id, this.state.units)}>
+                Add to cart
+          </Button>
+        }
+        <Button className={classes.button} size="small" color="primary" onClick={goBack}>
+            Back
+        </Button>
       </Card>
     );
   }

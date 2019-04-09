@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
 
 import authService from '../../services/auth-service';
 import { withAuthConsumer } from '../../context/AuthStore';
@@ -40,7 +39,7 @@ class NewProduct extends Component {
   }
 
   handleChange = (event) => {
-    const { name, value, files } = event.target;
+    const { name, value } = event.target;
     this.setState({
       product: {
         ...this.state.product,

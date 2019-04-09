@@ -12,7 +12,6 @@ import { withStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core/
 import GoogleMapsContainer from '../misc/GoogleMapsContainer';
 import TitlebarGridList from '../misc/TitlebarGridList';
 
-import constants from '../../constants'
 import productService from '../../services/product-service';
 
 import { withAuthConsumer } from '../../context/AuthStore';
