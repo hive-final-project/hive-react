@@ -38,7 +38,8 @@ class GoogleMapsContainer extends React.Component {
     const style = {
       width: '90vw',
       height: '50vh',
-      margin: '0'
+      margin: '0', 
+      padding: '0'
     }
     return (
       <Map
@@ -47,20 +48,38 @@ class GoogleMapsContainer extends React.Component {
         style = { style }
         google = { this.props.google }
         onClick = { this.onMapClick }
-        zoom = { 14 }
-        initialCenter = {{ lat: this.props.user.location.coordinates[1], lng: this.props.user.location.coordinates[0] }}
+        zoom = { 8 }
+        initialCenter = {{ lat: 40.39, lng: -3.69 }}
       >
         <Marker
           onClick = { this.onMarkerClick }
-          title = { 'Changing Colors Garage' }
-          position = {{ lat: 39.648209, lng: -75.711185 }}
-          name = { 'Changing Colors Garage' }
+          title = { 'Carnicerias Guadarrama' }
+          position = {{ lat: 40.67, lng: -4.09 }}
+          name = { 'Carnicerias Guadarrama' }
         />
         <Marker
           onClick = { this.onMarkerClick }
-          title = { 'Changing Colors Garage' }
-          position = {{ lat: 20.648209, lng: -75.711185 }}
-          name = { 'Changing Colors Garage' }
+          title = { "Verduleria S.A." }
+          position = {{ lat: 40.64, lng: -3.17}}
+          name = { "Verduleria S.A." }
+        />
+        <Marker
+          onClick = { this.onMarkerClick }
+          title = { "La lechería S.L." }
+          position = {{ lat: 40.11, lng: -3.15}}
+          name = { "La lechería S.L." }
+        />
+        <Marker
+          onClick = { this.onMarkerClick }
+          title = { "La polleria alegre S.A." }
+          position = {{ lat: 40.42, lng:-3.92}}
+          name = { "La polleria alegre S.A." }
+        />
+        <Marker
+          onClick = { this.onMarkerClick }
+          title = { "La buena miel S.L." }
+          position = {{ lat: 40.37, lng:-3.82}}
+          name = { "La buena miel S.L." }
         />
         <InfoWindow
           marker = { this.state.activeMarker }
@@ -71,13 +90,7 @@ class GoogleMapsContainer extends React.Component {
               variant = 'headline'
               component = 'h4'
             >
-              Changing Colors Garage
-            </Typography>
-            <Typography
-              component = 'p'
-            >
-              98G Albe Dr Newark, DE 19702 <br />
-              302-293-8627
+              {this.state.activeMarker.name}
             </Typography>
           </Paper>
         </InfoWindow>
