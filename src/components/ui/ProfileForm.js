@@ -99,10 +99,10 @@ const ProfileForm = ({
 }) => {
 	return(
 		<Fragment>
-			<NavBar />
-            <main className={classes.main}>
+			<NavBar component={'span'}/>
+            <main component={'span'} className={classes.main}>
 				<CssBaseline />
-				<Paper className={classes.paper}>
+				<Paper component={'span'} className={classes.paper}>
 					<ImageAvatar image={imageURL} />
 					<Typography component="h1" variant="h5">
 						Edit your profile:
@@ -162,7 +162,7 @@ const ProfileForm = ({
 									onBlur={handleBlur}
 								/>
 							</FormControl>
-							{isProducer && (
+							{isProducer() && (
 								<FormControl className={classes.formControl} fullWidth>
 									<InputLabel htmlFor="deliverDay">Deliver day:</InputLabel>
 									<Select
@@ -183,7 +183,7 @@ const ProfileForm = ({
 									</Select>
 								</FormControl>
 							)}
-							{isProducer && (
+							{isProducer() && (
 								<FormControl className={classes.formControl} margin="normal" fullWidth>
 								<InputLabel htmlFor="category">Category</InputLabel>
                                 <Select
@@ -217,7 +217,7 @@ const ProfileForm = ({
 									{touch.email && errors.name}
 								</FormHelperText>
 							</FormControl>
-							<FormControl className={classes.formControl} margin="normal" fullWidth>
+							<FormControl component={'span'} className={classes.formControl} margin="normal" fullWidth>
 							<Button
 								type="submit"
 								variant="contained"

@@ -1,6 +1,7 @@
 
 export default {
-    GoogleApiKey: 'AIzaSyBcSb-DUiOlw_s2LTlph84CnzgcssBjW5M',
+    GoogleApiKey: 'AIzaSyB4x75nGWgbkrfbiEYioeFOiZqUN_sdNZM',
+    StripeApiKey: 'pk_test_vridYaEaG3bHcgevNGHliRGz00aIDUqGzD',
     CATEGORY_CONST : [
     {
         id: "veggie",

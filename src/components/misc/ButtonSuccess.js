@@ -28,22 +28,33 @@ const styles = theme => ({
 class ButtonSuccess extends React.Component {
   state = {
     loading: false,
-    success: false,
+    success: false
   };
+
+
+  componentDidUpdate(prevProps, prevState) {
+    if(prevProps.orderStatus !== this.props.orderStatus && this.props.orderStatus === 'Delivered') {
+      this.setState({ success: true })
+    }
+  }
+
+
 
   componentWillUnmount() {
     clearTimeout(this.timer);
   }
 
   handleButtonClick = () => {
+
     if (!this.state.loading) {
       this.setState(
         {
           success: false,
-          loading: true,
+          loading: true
         },
         () => {
           this.timer = setTimeout(() => {
+            this.props.onClick()
             this.setState({
               loading: false,
               success: true,

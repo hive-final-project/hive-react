@@ -115,8 +115,8 @@ const styles = theme => ({
               Log in
             </Button>
             </FormControl>
-            <Typography className={classes.link} component="h8" variant="h7">
-              Don't have an account? <Link to="/register">Register now!</Link>
+            <Typography className={classes.link} component="span" variant="subtitle1">
+              Don't have an account? <Link style={{ textDecoration: "none", color:"#6E8C13" }} to="/register">Register now!</Link>
             </Typography>
           </MuiThemeProvider>
         </form>

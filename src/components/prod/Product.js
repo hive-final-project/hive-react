@@ -75,7 +75,7 @@ class Product extends React.Component {
     productService.getProduct(this.props.product)
     .then( 
         (product) => {
-          this.setState({ product }, () => console.info('PRODUCT => ', this.state.product))
+          this.setState({ product })
         },
         (error) => console.error(error)
       )
@@ -188,7 +188,7 @@ class Product extends React.Component {
         />
         }
         {!this.isProducer() && 
-          <Button className={classes.bigButton} variant="contained" color="primary" onClick={() => addToCart(product.id, this.state.units)}>
+          <Button className={classes.bigButton} variant="contained" color="primary" onClick={() => { goBack() ;  addToCart(product.id, product.price,this.state.units)}}>
                 Add to cart
           </Button>
         }

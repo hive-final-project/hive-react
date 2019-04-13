@@ -1,13 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Avatar from '@material-ui/core/Avatar';
-import Typography from '@material-ui/core/Typography';
 
+import productService from '../../services/product-service';
+import ProductItemOrder from './ProductItemOrder';
 
 const styles = theme => ({
   root: {
@@ -20,32 +17,41 @@ const styles = theme => ({
   },
 });
 
-function OrderItemsList(props) {
-  
-  const { classes, order } = props;
-  const products = () => order.products.map( product => (
-    <ListItem alignItems="flex-start">
-        <ListItemAvatar>
-          <Avatar alt={product.product.name} src={product.product.imageURL} />
-        </ListItemAvatar>
-        <ListItemText
-          primary={product.product.name}
-          secondary={
-            <React.Fragment>
-              <Typography component="span" className={classes.inline} color="textPrimary">
-                {product.units}
-              </Typography>
-              {product.product.price}
-            </React.Fragment>
-          }
-        />
-      </ListItem>
-  ))
+async function asyncForEach(array, callback) {
+  for (let index = 0; index < array.length; index++) {
+    await callback(array[index], index, array);
+  }
+}
+
+class OrderItemsList extends Component  { 
+  state = {
+    products: [],
+  }
+
+  componentDidMount(){
+    const start = async () => {
+      let newProducts = [];
+      await asyncForEach( this.props.order.products, async(product) => {
+        const eachProduct = await productService.getProduct(product.product)
+        newProducts.push({ product:eachProduct, units: product.units })
+      })
+      return newProducts;
+    }
+
+    start()
+    .then(products => {this.setState({ products: products})})
+  }
+
+  render (){
+  const { classes } = this.props;
+  const { price } = this.props.order;
+  const products = () => this.state.products.map(product => <ProductItemOrder key={product.id} product={product} classes={classes} price={price}/>)
   return (
-    <List className={classes.root}>
-      {products()}
-    </List>
+      <List className={classes.root}>
+        {products()}
+      </List>
   );
+}
 }
 
 OrderItemsList.propTypes = {

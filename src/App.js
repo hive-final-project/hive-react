@@ -8,10 +8,13 @@ import PrivateRoute from './guards/PrivateRoute';
 import Home from './components/Home';
 import Profile from './components/auth/Profile';
 import Order from './components/order/Order';
+import constants from './constants';
+import { StripeProvider } from 'react-stripe-elements';
 
 class App extends Component {
   render() {
     return (
+      <StripeProvider apiKey={constants.StripeApiKey}>
       <div className="App">
          <Switch>
               <Route exact path="/register" component={Register} />
@@ -21,6 +24,7 @@ class App extends Component {
               <PrivateRoute exact path="/order" component={Order} />
           </Switch>
       </div>
+      </StripeProvider>
     );
   }
 }

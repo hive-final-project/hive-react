@@ -30,7 +30,6 @@ class EditProduct extends Component {
   }
 
   componentDidMount() {
-    console.log('PROPS PRODUCT',this.props.product)
     this.setState({ product: this.props.product })
   }
 

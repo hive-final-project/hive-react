@@ -11,6 +11,7 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 import { withStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import ImageAvatar from './ImageAvatar';
+import FaceIcon from '@material-ui/icons/Face';
 
 import authService from '../../services/auth-service';
 import { withAuthConsumer } from '../../context/AuthStore';
@@ -74,9 +75,7 @@ const styles = theme => ({
     display: 'flex',
     [theme.breakpoints.up('md')]: {
       display: 'none',
-    },
-
-    
+    }, 
   },
   personalized:{
     color: '#F9B233',
@@ -87,7 +86,8 @@ const styles = theme => ({
       color: '#F9B233'
   },
   link:{
-    underline: 'none'
+    textDecoration: "none",
+    color: "black"
   }
 });
 
@@ -140,7 +140,7 @@ class NavBar extends React.Component {
 
           <MenuItem onClick={this.handleMobileMenuClose}>
             <IconButton color="inherit">
-                <AccountCircle />
+              <FaceIcon />
             </IconButton>
             <Link to='/profile' className={classes.link}><p>Profile</p></Link>
           </MenuItem>
@@ -159,11 +159,11 @@ class NavBar extends React.Component {
       <div className={classes.root}>
       <MuiThemeProvider theme={theme}>
         <AppBar className={classes.personalized} position="fixed">
-          <Toolbar>
-            <Typography className={classes.personalized} variant="h6" noWrap>
+          <Toolbar component={'span'}>
+            <Typography component={'span'} className={classes.personalized} variant="h6" noWrap>
                 <Link to='/'><ImageAvatar image={pics.miniLogo} className={classes.avatar}/></Link>
             </Typography>
-            <Typography className={classes.personalizedUser} variant="subtitle1" noWrap>
+            <Typography component={'span'} className={classes.personalizedUser} variant="subtitle1" noWrap>
                 {this.props.user.name}
             </Typography>
             <div className={classes.grow} />

@@ -2,6 +2,10 @@ import React from 'react';
 import { GoogleApiWrapper, InfoWindow, Map, Marker } from 'google-maps-react';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import constants from '../../constants';
+
+import { withAuthConsumer } from '../../context/AuthStore';
+
 
 class GoogleMapsContainer extends React.Component {
   constructor(props) {
@@ -32,10 +36,9 @@ class GoogleMapsContainer extends React.Component {
   }
   render() {
     const style = {
-      width: '50vw',
-      height: '75vh',
-      'marginLeft': 'auto',
-      'marginRight': 'auto'
+      width: '90vw',
+      height: '50vh',
+      margin: '0'
     }
     return (
       <Map
@@ -45,12 +48,18 @@ class GoogleMapsContainer extends React.Component {
         google = { this.props.google }
         onClick = { this.onMapClick }
         zoom = { 14 }
-        initialCenter = {{ lat: 39.648209, lng: -75.711185 }}
+        initialCenter = {{ lat: this.props.user.location.coordinates[1], lng: this.props.user.location.coordinates[0] }}
       >
         <Marker
           onClick = { this.onMarkerClick }
           title = { 'Changing Colors Garage' }
           position = {{ lat: 39.648209, lng: -75.711185 }}
+          name = { 'Changing Colors Garage' }
+        />
+        <Marker
+          onClick = { this.onMarkerClick }
+          title = { 'Changing Colors Garage' }
+          position = {{ lat: 20.648209, lng: -75.711185 }}
           name = { 'Changing Colors Garage' }
         />
         <InfoWindow
@@ -76,6 +85,4 @@ class GoogleMapsContainer extends React.Component {
     );
   }
 }
-export default GoogleApiWrapper({
-    apiKey: ('lll')
-})(GoogleMapsContainer)
+export default GoogleApiWrapper({apiKey: (constants.GoogleApiKey)})(withAuthConsumer(GoogleMapsContainer))

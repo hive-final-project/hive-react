@@ -17,7 +17,6 @@ const styles = theme => ({
 
 function AlignItemsList(props) {
   const { classes, orders } = props;
-  
   return (
     <List className={classes.root}>
       <Item classes={classes} orders={orders} />

@@ -1,40 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Avatar from '@material-ui/core/Avatar';
-import Typography from '@material-ui/core/Typography';
-import moment from 'moment'
-
+import ItemOrder from './ItemOrder';
+import Divider from '@material-ui/core/Divider';
+import { Typography } from '@material-ui/core';
 
 const Item = (props) => {
     const { classes, orders } = props;
-    const orderProducts = () => orders && orders.map(ord => 
-    <List key={ord.id} className={classes.root}>
-      <ListItem alignItems="flex-start">
-        <ListItemAvatar>
-          <Avatar alt="product" className={classes.bigAvatar} src={ord.user.imageURL} />
-        </ListItemAvatar>
-        <ListItemText
-          primary={moment(ord.updatedAt).format('YYYY-MM-DD')}
-          secondary={
-            <React.Fragment>
-              <Typography component="span" className={classes.inline} color="textPrimary">
-                status: {ord.served}
-              </Typography>
-                 - Order id: {ord.id}
-          </React.Fragment>
-          }
-        />
-      </ListItem>
-    </List>
-    );
-      
-      return (
+
+    const orderProductsServed = () => orders && orders.filter(ord => ord.served === 'Delivered').map(ord => <ItemOrder key={ord.id} classes={classes} order={ ord }/>);  
+    const orderProductsToServe = () => orders && orders.filter(ord => ord.served !== 'Delivered').map(ord => <ItemOrder key={ord.id} classes={classes} order={ ord }/>);
+    return (
         <React.Fragment>
-          {orderProducts()}
+          <Typography variant="h6" style={{color:"#6E8C13"}}>
+          Orders to serve:
+          </Typography>
+          <Divider variant="middle" />
+          {orderProductsToServe()}
+          <Divider variant="middle" />
+          <Typography variant="h6" style={{color:"#6E8C13"}}>
+          Orders served:
+          </Typography>
+          <Divider variant="middle" />
+          {orderProductsServed()}
         </React.Fragment> 
   )
 

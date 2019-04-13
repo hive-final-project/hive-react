@@ -70,7 +70,6 @@ class NewProduct extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    console.log(this.state.product)
     productService.newProduct(this.state.product)
       .then(
         (product) => this.setState({ product: {...this.state.product, ...product}, saved: true }),

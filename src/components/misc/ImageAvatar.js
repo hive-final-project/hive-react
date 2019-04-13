@@ -18,8 +18,8 @@ const styles = {
 const ImageAvatar = ({classes, image}) => {
 
   return (
-    <Grid container justify="center" alignItems="center">
-      <Avatar alt="Remy Sharp" src={image} />
+    <Grid component={'span'} container justify="center" alignItems="center">
+      <Avatar component={'span'} alt="Remy Sharp" src={image} />
     </Grid>
   );
 }

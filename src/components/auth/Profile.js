@@ -51,7 +51,8 @@ class Profile extends Component {
       role: '',
       attachment: '',
       location: {
-        coordinates: [0,0] },
+        coordinates: [ 0 , 0 ]
+      },
       imageURL: '',
       category:'',
       deliverDay:'',
@@ -88,7 +89,7 @@ class Profile extends Component {
     })
   }
 
-  isProducer = () => this.state.producer ==='PRODUCER';
+  isProducer = () => this.state.user.role ==='PRODUCER';
 
   handleBlur = (event) => {
     const { name } = event.target;
@@ -126,7 +127,7 @@ class Profile extends Component {
   render () {
     
     const { isRegistered, errors, user, touch } = this.state;
-		console.log('isRegistered', isRegistered)    
+
 		if (isRegistered) {
       return (<Redirect to="/" />)
     }

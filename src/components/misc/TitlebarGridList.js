@@ -12,7 +12,7 @@ import Product from '../prod/Product';
 import { withAuthConsumer } from '../../context/AuthStore';
 import Button from '@material-ui/core/Button';
 import Order from '../order/Order';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import { Typography } from '@material-ui/core';
 
 import { orderService } from '../../services';
 
@@ -42,15 +42,15 @@ class TitlebarGridList extends Component {
     order: {
       user: this.props.user,
       products: [],
-      price: 0,
-      served: false
+      price: 0
     },
     preview: false
   }
 
   componentDidUpdate(prevProps) {
-    if(prevProps.products !== this.props.products) {
-      this.setState({ products: this.props.products }, () => console.info(this.state.products))
+    if(prevProps.products !== this.props.products && this.props.products.length) {
+      console.info('HAY PRODUCTS => ', this.props.products.length)
+      this.setState({ products: this.props.products })
     }
   }
 
@@ -67,41 +67,35 @@ class TitlebarGridList extends Component {
     this.setState({ singleProd: ''})
   }
   
-  addToCart = (product, units) => {
-    this.setState({ order: { products:  [...this.state.order.products, {product, units}] }}, ()=> console.log(this.state.products))
+  addToCart = (product, price, units) => {
+    const total = this.state.order.price + (price * units)
+    this.setState({ order: { products: [...this.state.order.products, {product, units}] , price: total}})
   }
 
   previewOrder = (order) => {
     orderService.newOrder(order)
-    .then(
-      (response) => { this.setState({ preview: true })},
-      (error) => console.error(error)
-    )
+      .then(
+        (response) => { this.setState({ preview: true, order: response })},
+        (error) => console.error(error)
+      )
+  }
+
+  isProducer = () => {
+    return this.props.user.role === 'PRODUCER'
   }
 
   render(){
-  const { classes, products, category } = this.props;
-  console.log('order',this.state.order)
+  const { classes, category } = this.props;
+ 
   if (this.state.singleProd){ 
     return (<Product product={this.state.singleProd} goBack={this.goBack} addToCart={this.addToCart}/>)
   }
   if (this.state.preview){
-    return (<Order order={this.state.order} />)
+    return (<Order order={this.state.order} goBack={this.goBack} />)
   }
 
-  // if (this.state.products.length === 0){
-  //   return (<CircularProgress className={classes.progress} color='#8ba342'  />)
-  // }
-
-  return (
-    <div className={classes.root}>
-      <SearchBar onChangeSearch={this.onChangeSearch}/>
-      <GridList cellHeight={180} className={classes.gridList}>
-        <GridListTile key="Subheader" cols={2} style={{ height: 'auto' }}>
-          <ListSubheader component="div"> { category }</ListSubheader>
-        </GridListTile>
-        {products && this.onFilter().map(product =>(
-            <GridListTile cols={2} className={classes.tile} key={product.id}>
+  const filterProductsByCategory = (category) => this.onFilter().filter(prod => prod.category === category).map(product =>(
+    <GridListTile cols={2} className={classes.tile} key={product.id}>
             <img src={product.imageURL} alt={product.name} />
             <GridListTileBar
             title={product.name}
@@ -119,11 +113,45 @@ class TitlebarGridList extends Component {
             }
             />
             </GridListTile>
-        ))}
+  ));
+
+  return (
+    <div className={classes.root}>
+      <SearchBar onChangeSearch={this.onChangeSearch}/>
+      <GridList cellHeight={180} className={classes.gridList}>
+        <GridListTile key="Subheader" cols={2} style={{ height: 'auto' }}>
+          <ListSubheader component="div"> { category }</ListSubheader>
+        </GridListTile>
+        {this.onFilter().filter(prod => prod.category === 'veggie').length &&
+          <Typography variant="h6" style={{height: '30px', color:"#6E8C13"}}>
+          Fruits and vegs:
+          </Typography>}
+          {filterProductsByCategory('veggie')}
+          {this.onFilter().filter(prod => prod.category === 'milky').length &&
+          <Typography variant="h6" style={{height: '30px', color:"#6E8C13"}}>
+          Milk products:
+          </Typography>}
+          {filterProductsByCategory('milky')}
+          {this.onFilter().filter(prod => prod.category === 'poultry').length &&
+          <Typography variant="h6" style={{height: '30px', color:"#6E8C13"}}>
+          Poultry products:
+          </Typography>}
+          {filterProductsByCategory('poultry')}
+          {this.onFilter().filter(prod => prod.category === 'apiculture').length &&
+          <Typography variant="h6" style={{height: '30px', color:"#6E8C13"}}>
+          Apiculture:
+          </Typography>}
+          {filterProductsByCategory('apiculture')}
+          {this.onFilter().filter(prod => prod.category === 'butcher').length &&
+          <Typography variant="h6" style={{height: '30px', color:"#6E8C13"}}>
+          Butcher products:
+          </Typography>}
+          {filterProductsByCategory('butcher')}
       </GridList>
-      <Button variant="contained" color="primary" fullWidth onClick={this.previewOrder}>
+      { !this.isProducer() &&
+      <Button variant="contained" color="primary" fullWidth onClick={() =>this.previewOrder(this.state.order)}>
           Preview order
-      </Button>
+      </Button>}
     </div>
   );
   }
